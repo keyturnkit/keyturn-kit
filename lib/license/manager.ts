@@ -61,21 +61,33 @@ export function createLicenseManager(opts: ManagerOptions) {
       const s = await opts.store.get();
       if (!s) return false;
       if (!force && now() - s.lastCheckedAt < recheckMs) return unlocked(s);
+
+      // The network call can take a while. If the key was removed or replaced meanwhile
+      // (deactivate, a new activate), don't write the old key back over it.
+      async function save(next: StoredLicense) {
+        const current = await opts.store.get();
+        if (!current || current.license.key !== s!.license.key || current.license.instanceId !== s!.license.instanceId) return false;
+        await opts.store.set(next);
+        return true;
+      }
+
       try {
         const r = await opts.provider.validate(s.license.key, s.license.instanceId);
         const t = now();
         if (!r.ok) {
-          await opts.store.set({ ...s, license: { ...s.license, status: 'invalid' }, lastCheckedAt: t, lastError: r.error });
+          await save({ ...s, license: { ...s.license, status: 'invalid' }, lastCheckedAt: t, lastError: r.error });
           return false;
         }
         const ok = r.license.status === 'active';
-        await opts.store.set({ license: r.license, lastCheckedAt: t, lastOkAt: ok ? t : s.lastOkAt, lastError: undefined });
+        if (!(await save({ license: r.license, lastCheckedAt: t, lastOkAt: ok ? t : s.lastOkAt, lastError: undefined }))) {
+          return unlocked(await opts.store.get());
+        }
         return ok && unlocked({ license: r.license, lastCheckedAt: t, lastOkAt: t });
       } catch (e) {
         if (!(e instanceof NetworkError)) throw e;
         // Offline: keep the last known state, grace period decides. Try again in an hour, not a full day.
-        await opts.store.set({ ...s, lastCheckedAt: now() - recheckMs + HOUR, lastError: 'offline' });
-        return unlocked(s);
+        await save({ ...s, lastCheckedAt: now() - recheckMs + HOUR, lastError: 'offline' });
+        return unlocked(await opts.store.get());
       }
     },
 

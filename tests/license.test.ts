@@ -150,6 +150,24 @@ describe('license manager', () => {
     expect(calls).toBe(2);
   });
 
+  it('a re-check that finishes after deactivate does not bring the key back', async () => {
+    let release!: () => void;
+    const gate = new Promise<void>((r) => (release = r));
+    const { m, store, advance } = setup({
+      validate: async () => {
+        await gate;
+        return { ok: true, license: { key: 'K', status: 'active', instanceId: 'i', expiresAt: null } };
+      },
+    });
+    await m.activate('K', 'x');
+    advance(2 * DAY);
+    const pending = m.refresh();
+    await m.deactivate();
+    release();
+    expect(await pending).toBe(false);
+    expect(store.peek()).toBeNull();
+  });
+
   it('locks an expired subscription', async () => {
     const { m, advance } = setup({
       activate: async () => ({ ok: true, license: { key: 'K', status: 'active', instanceId: 'i', expiresAt: new Date(1_001 * DAY).toISOString() } }),
