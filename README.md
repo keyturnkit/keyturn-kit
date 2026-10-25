@@ -1,0 +1,79 @@
+# Keyturn Kit
+
+Sell a Chrome extension with Lemon Squeezy license keys. No server, no secret key in the extension. Firefox builds come from WXT (`npm run zip:firefox`) but we have only tested Chrome so far.
+
+Google wound down Chrome Web Store payments between 2020 and early 2021, so a paid extension has to sort out payment, license keys, offline use and refunds on its own. Lemon Squeezy takes the payment. This starter handles the license keys, offline use and disabled keys in about 380 lines of TypeScript.
+
+Built on [WXT](https://wxt.dev), React and TypeScript, Manifest V3.
+
+## What happens when someone pays
+
+1. The user clicks **Get a key** and pays on your Lemon Squeezy checkout.
+2. Lemon Squeezy emails them a license key.
+3. They paste it into the popup. The extension activates it with the public [License API](https://docs.lemonsqueezy.com/api/license-api). No API key ships in the extension.
+4. Once a day, while the browser is open, the extension re-checks the key. Keys that Lemon Squeezy reports as invalid or disabled lock Pro on the next check. When you refund an order, make sure its key is disabled in the dashboard (Lemon Squeezy's docs don't say whether a refund does this on its own). If the license server can't be reached, Pro keeps working for 7 days after the last good check.
+
+Keys from other Lemon Squeezy stores are rejected by `store_id`, so a key bought from someone else's store won't turn on your Pro features.
+
+## Quick start
+
+```bash
+npm install
+npm run dev        # opens Chrome with the extension loaded
+npm test           # license logic tests, no network
+npm run build      # .output/chrome-mv3
+npm run zip        # store-ready zip
+```
+
+Edit `lib/config.ts`:
+
+```ts
+checkoutUrl: 'https://your-store.lemonsqueezy.com/buy/...',
+lemonsqueezy: { storeId: 12345, productIds: [] },
+```
+
+Also set `name` and `description` in `wxt.config.ts`.
+
+In Lemon Squeezy, turn on **Generate license keys** for the product and set an **activation limit** (for example 3 browsers per key). Try the whole flow in test mode with a test card before going live.
+
+## Gating features
+
+```tsx
+<ProGate>
+  <BulkExport />
+</ProGate>
+```
+
+```ts
+if (await license.isPro()) { ... }
+```
+
+## Files
+
+```
+lib/config.ts                       checkout link, store id, re-check timing
+lib/license/manager.ts              activation, daily re-check, offline grace, disabled keys
+lib/license/providers/lemonsqueezy.ts
+components/ProGate.tsx              show children only to Pro users
+components/LicenseForm.tsx          enter key, see status, move key to another browser
+entrypoints/background.ts           daily re-check
+tests/                              tests with mocked fetch
+```
+
+## Limits
+
+A determined user can patch any client-side check. What this does stop is sharing a key past the activation limit you set, and using a key you have disabled. For stronger protection, gate a server feature.
+
+## Keyturn Kit Pro
+
+The paid edition ($59, one-time) adds:
+
+- a free trial counted from install, and a daily number of free uses per feature
+- Polar and Dodo Payments next to Lemon Squeezy, switched with one line
+- AGENTS.md so Claude Code or Cursor adds paid features the right way
+
+It goes on sale once our store is approved; the link will be here.
+
+## License
+
+MIT

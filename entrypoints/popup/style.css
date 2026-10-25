@@ -1,0 +1,29 @@
+:root {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+  color: #1d1d1f;
+  background: #fff;
+}
+@media (prefers-color-scheme: dark) {
+  :root { color: #e8e8e8; background: #1c1c1e; }
+  input { background: #2c2c2e; color: inherit; border-color: #48484a; }
+}
+body { margin: 0; min-width: 320px; }
+main { padding: 14px 16px; display: grid; gap: 12px; }
+header { display: flex; align-items: center; gap: 8px; }
+h1 { font-size: 16px; margin: 0; }
+h2 { font-size: 13px; margin: 0 0 4px; }
+p { margin: 0; }
+section { border-top: 1px solid #8884; padding-top: 10px; }
+.badge { font-size: 11px; padding: 1px 6px; border-radius: 4px; background: #1a7f37; color: #fff; }
+.license { display: grid; gap: 8px; border-top: 1px solid #8884; padding-top: 10px; }
+label { display: grid; gap: 4px; font-weight: 600; }
+input { font: inherit; padding: 6px 8px; border: 1px solid #ccc; border-radius: 6px; }
+button { font: inherit; padding: 6px 10px; border-radius: 6px; border: 1px solid #8886; background: #f2f2f2; cursor: pointer; }
+@media (prefers-color-scheme: dark) { button { background: #2c2c2e; color: inherit; } }
+button:disabled { opacity: 0.5; cursor: default; }
+a { color: #0a66c2; }
+.muted { color: #888; font-size: 12px; }
+.error { color: #c62828; font-size: 12px; }
+.upsell { font-size: 13px; }
+footer { font-size: 12px; }
