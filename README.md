@@ -36,6 +36,8 @@ Also set `name` and `description` in `wxt.config.ts`.
 
 In Lemon Squeezy, turn on **Generate license keys** for the product and set an **activation limit** (for example 3 browsers per key). Try the whole flow in test mode with a test card before going live.
 
+When you go live, copy the product to live mode in Lemon Squeezy. The copy gets a new product ID and a new checkout link, so update `productIds` and `checkoutUrl`. Otherwise your customers' real keys are rejected as belonging to another product.
+
 ## Gating features
 
 ```tsx
