@@ -6,6 +6,8 @@ Google wound down Chrome Web Store payments between 2020 and early 2021, so a pa
 
 Built on [WXT](https://wxt.dev), React and TypeScript, Manifest V3.
 
+![The free edition's popup, rendered from its build in a drawn Chrome window: locked, a key typed, Activate, then Pro on](docs/popup-run.gif)
+
 You can try the popup before cloning: [keyturnkit.github.io](https://keyturnkit.github.io) runs it in the page. Paste `KEYTURN-DEMO-2026` and press Activate to see Pro turn on, or any other key to see the error your users would get.
 
 ## What happens when someone pays
