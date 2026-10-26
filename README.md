@@ -1,6 +1,6 @@
 # Keyturn Kit
 
-Sell a Chrome extension with Lemon Squeezy license keys. No server, no secret key in the extension. Firefox builds come from WXT (`npm run zip:firefox`) but we have only tested Chrome so far.
+Sell a Chrome extension with Lemon Squeezy license keys. No server, no secret key in the extension. Firefox builds come from WXT (`npm run zip:firefox`). That build passes Mozilla's `web-ext lint` with no errors (two warnings, both inside React DOM), but we haven't tried it by hand in Firefox yet.
 
 Google wound down Chrome Web Store payments between 2020 and early 2021, so a paid extension has to sort out payment, license keys, offline use and refunds on its own. Lemon Squeezy takes the payment. This starter handles the license keys, offline use and disabled keys in about 400 lines of TypeScript.
 
