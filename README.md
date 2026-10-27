@@ -75,7 +75,7 @@ A determined user can patch any client-side check. What this does stop is sharin
 The paid edition ($59, one-time) adds:
 
 - a free trial counted from install, and a daily number of free uses per feature
-- Polar and Dodo Payments next to Lemon Squeezy, switched with one line
+- Polar, Dodo Payments and Gumroad next to Lemon Squeezy, switched with one line
 - AGENTS.md so Claude Code or Cursor adds paid features the right way
 
 [Get Pro, $59](https://buy.polar.sh/polar_cl_lbYlQnZT7FFPBcNrAdcwK1gqzx45xyNy3anEs3twjGy). Polar handles payment and tax; you get the source as a zip.
