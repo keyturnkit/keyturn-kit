@@ -80,6 +80,8 @@ The paid edition ($59, one-time) adds:
 
 [Get Pro, $59](https://buy.polar.sh/polar_cl_lbYlQnZT7FFPBcNrAdcwK1gqzx45xyNy3anEs3twjGy). Polar handles payment and tax; you get the source as a zip.
 
+There are guides with the code for [Polar license keys](https://keyturnkit.github.io/guides/polar-license-keys-chrome-extension/), [Dodo Payments license keys](https://keyturnkit.github.io/guides/dodo-license-keys-chrome-extension/) and [a free trial for a paid extension](https://keyturnkit.github.io/guides/chrome-extension-free-trial/).
+
 ## License
 
 MIT
