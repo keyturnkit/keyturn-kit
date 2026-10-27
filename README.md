@@ -10,6 +10,8 @@ Built on [WXT](https://wxt.dev), React and TypeScript, Manifest V3. Listed in th
 
 You can try the popup before cloning: [keyturnkit.github.io](https://keyturnkit.github.io) runs it in the page. Paste `KEYTURN-DEMO-2026` and press Activate to see Pro turn on, or any other key to see the error your users would get.
 
+Selling through Polar, Dodo Payments, Gumroad or Payhip instead, or want a free trial before the paywall? That's [Keyturn Kit Pro](#keyturn-kit-pro), $59 once.
+
 ## What happens when someone pays
 
 1. The user clicks **Get a key** and pays on your Lemon Squeezy checkout.
