@@ -15,18 +15,18 @@ h1 { font-size: 16px; margin: 0; }
 h2 { font-size: 13px; margin: 0 0 4px; }
 p { margin: 0; }
 section { border-top: 1px solid #8884; padding-top: 10px; }
-.badge { font-size: 11px; padding: 1px 6px; border-radius: 4px; background: #1a7f37; color: #fff; }
+.badge { font-size: 11px; padding: 1px 6px; border-radius: 4px; background: #0e7a5a; color: #fff; }
 .license { display: grid; gap: 8px; border-top: 1px solid #8884; padding-top: 10px; }
 label { display: grid; gap: 4px; font-weight: 600; }
 input { font: inherit; padding: 6px 8px; border: 1px solid #ccc; border-radius: 6px; }
 button { font: inherit; padding: 6px 10px; border-radius: 6px; border: 1px solid #8886; background: #f2f2f2; cursor: pointer; }
 @media (prefers-color-scheme: dark) { button { background: #2c2c2e; color: inherit; } }
 button:disabled { opacity: 0.5; cursor: default; }
-a { color: #0a66c2; font-weight: 600; text-decoration: none; }
+a { color: #0e7a5a; font-weight: 600; text-decoration: none; }
 a:hover { text-decoration: underline; }
-@media (prefers-color-scheme: dark) { a { color: #6cb4ff; } }
-.upsell a { display: inline-block; margin-left: 4px; padding: 2px 10px; border-radius: 999px; background: #0a66c2; color: #fff; font-size: 12px; }
-.upsell a:hover { text-decoration: none; background: #0857a6; }
+@media (prefers-color-scheme: dark) { a { color: #3fc79a; } }
+.upsell a { display: inline-block; margin-left: 4px; padding: 2px 10px; border-radius: 999px; background: #0e7a5a; color: #fff; font-size: 12px; }
+.upsell a:hover { text-decoration: none; background: #0b6449; }
 .muted { color: #888; font-size: 12px; }
 .error { color: #c62828; font-size: 12px; }
 .upsell { font-size: 13px; }
