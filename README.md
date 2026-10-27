@@ -4,7 +4,7 @@ Sell a Chrome extension with Lemon Squeezy license keys. No server, no secret ke
 
 Google wound down Chrome Web Store payments between 2020 and early 2021, so a paid extension has to sort out payment, license keys, offline use and refunds on its own. Lemon Squeezy takes the payment. This starter handles the license keys, offline use and disabled keys in about 400 lines of TypeScript.
 
-Built on [WXT](https://wxt.dev), React and TypeScript, Manifest V3.
+Built on [WXT](https://wxt.dev), React and TypeScript, Manifest V3. Listed in the [WXT community resources](https://wxt.dev/guide/resources/community).
 
 ![The free edition's popup, rendered from its build in a drawn Chrome window: locked, a key typed, Activate, then Pro on](docs/popup-run.gif)
 
