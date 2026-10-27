@@ -16,7 +16,7 @@ Selling through Polar, Dodo Payments, Gumroad or Payhip instead, or want a free 
 
 1. The user clicks **Get a key** and pays on your Lemon Squeezy checkout.
 2. Lemon Squeezy emails them a license key.
-3. They paste it into the popup. The extension activates it with the public [License API](https://docs.lemonsqueezy.com/api/license-api). No API key ships in the extension.
+3. They paste it into the popup. The extension activates it with the public [License API](https://docs.lemonsqueezy.com/api/license-api). No API key ships in the extension. The options page also opens once right after install, so someone who paid first can paste the key straight away.
 4. Once a day, while the browser is open, the extension re-checks the key. Keys that Lemon Squeezy reports as invalid or disabled lock Pro on the next check. When you refund an order, make sure its key is disabled in the dashboard (Lemon Squeezy's docs don't say whether a refund does this on its own). If the license server can't be reached, Pro keeps working for 7 days after the last good check.
 
 Keys from other Lemon Squeezy stores are rejected by `store_id`, so a key bought from someone else's store won't turn on your Pro features.
