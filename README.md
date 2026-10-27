@@ -80,7 +80,7 @@ The paid edition ($59, one-time) adds:
 
 [Get Pro, $59](https://buy.polar.sh/polar_cl_lbYlQnZT7FFPBcNrAdcwK1gqzx45xyNy3anEs3twjGy). Polar handles payment and tax; you get the source as a zip.
 
-There are guides with the code for [Polar license keys](https://keyturnkit.github.io/guides/polar-license-keys-chrome-extension/), [Dodo Payments license keys](https://keyturnkit.github.io/guides/dodo-license-keys-chrome-extension/) and [a free trial for a paid extension](https://keyturnkit.github.io/guides/chrome-extension-free-trial/).
+There are guides with the code for [Polar](https://keyturnkit.github.io/guides/polar-license-keys-chrome-extension/), [Dodo Payments](https://keyturnkit.github.io/guides/dodo-license-keys-chrome-extension/), [Gumroad](https://keyturnkit.github.io/guides/gumroad-license-keys-chrome-extension/) and [Payhip](https://keyturnkit.github.io/guides/payhip-license-keys-chrome-extension/) license keys, and [a free trial for a paid extension](https://keyturnkit.github.io/guides/chrome-extension-free-trial/). If you're weighing a move away from Lemon Squeezy as it shifts toward Stripe Managed Payments, [this comparison](https://keyturnkit.github.io/guides/move-license-keys-off-lemon-squeezy/) covers the four.
 
 ## License
 
