@@ -4,6 +4,7 @@
 //   - re-check with the provider at most every `recheckHours`
 //   - if the provider can't be reached, stay unlocked for `offlineGraceDays` after the last good check
 //   - a key the provider rejects locks Pro immediately
+import { fail, messageForStatus } from './errors';
 import { NetworkError, type LicenseInfo, type LicenseProvider } from './types';
 
 export interface StoredLicense {
@@ -46,7 +47,7 @@ export function createLicenseManager(opts: ManagerOptions) {
       try {
         const r = await opts.provider.activate(trimmed, instanceName);
         if (!r.ok) return r;
-        if (r.license.status !== 'active') return { ok: false, error: `License is ${r.license.status}` };
+        if (r.license.status !== 'active') return { ok: false, error: messageForStatus(r.license.status) };
         const t = now();
         await opts.store.set({ license: r.license, lastCheckedAt: t, lastOkAt: t });
         return { ok: true };
@@ -79,7 +80,7 @@ export function createLicenseManager(opts: ManagerOptions) {
           return false;
         }
         const ok = r.license.status === 'active';
-        if (!(await save({ license: r.license, lastCheckedAt: t, lastOkAt: ok ? t : s.lastOkAt, lastError: undefined }))) {
+        if (!(await save({ license: r.license, lastCheckedAt: t, lastOkAt: ok ? t : s.lastOkAt, lastError: ok ? undefined : messageForStatus(r.license.status) }))) {
           return unlocked(await opts.store.get());
         }
         return ok && unlocked({ license: r.license, lastCheckedAt: t, lastOkAt: t });
@@ -107,7 +108,7 @@ export function createLicenseManager(opts: ManagerOptions) {
         result = await opts.provider.deactivate(s.license.key, s.license.instanceId);
       } catch (e) {
         if (!(e instanceof NetworkError)) throw e;
-        result = { ok: false, error: 'offline' };
+        result = fail('release_failed', 'offline');
       }
       // Remove locally either way so the user can move the key to another browser.
       await opts.store.set(null);

@@ -1,5 +1,6 @@
 // Lemon Squeezy License API. Public endpoints, no secret key needed in the extension.
 // https://docs.lemonsqueezy.com/api/license-api
+import { classify, fail } from '../errors';
 import { NetworkError, type LicenseInfo, type LicenseProvider, type ProviderResult } from '../types';
 
 const BASE = 'https://api.lemonsqueezy.com/v1/licenses';
@@ -47,10 +48,10 @@ export function lemonSqueezy(opts: LemonSqueezyOptions): LicenseProvider {
   }
 
   function toResult(r: LsResponse, ok: boolean | undefined, instanceId: string | undefined): ProviderResult {
-    if (!ok || !r.license_key) return { ok: false, error: r.error ?? 'License key not accepted' };
-    if (r.meta?.store_id !== opts.storeId) return { ok: false, error: 'This key belongs to a different store' };
+    if (!ok || !r.license_key) return fail(classify(r.error), r.error ?? 'no error text');
+    if (r.meta?.store_id !== opts.storeId) return fail('other_store', `store_id ${r.meta?.store_id}`);
     if (opts.productIds?.length && !opts.productIds.includes(r.meta.product_id)) {
-      return { ok: false, error: 'This key is for a different product' };
+      return fail('other_product', `product_id ${r.meta.product_id}`);
     }
     const status = r.license_key.status;
     const license: LicenseInfo = {
@@ -70,7 +71,7 @@ export function lemonSqueezy(opts: LemonSqueezyOptions): LicenseProvider {
       // Check the store before activating, so a key from another store doesn't use up one of its activations here.
       const pre = await call('validate', { license_key: key });
       if (pre.license_key && pre.meta && pre.meta.store_id !== opts.storeId) {
-        return { ok: false, error: 'This key belongs to a different store' };
+        return fail('other_store', `store_id ${pre.meta.store_id}`);
       }
       const r = await call('activate', { license_key: key, instance_name: instanceName });
       return toResult(r, r.activated, undefined);
@@ -81,7 +82,7 @@ export function lemonSqueezy(opts: LemonSqueezyOptions): LicenseProvider {
     },
     async deactivate(key, instanceId) {
       const r = await call('deactivate', { license_key: key, instance_id: instanceId });
-      return { ok: !!r.deactivated, error: r.error ?? undefined };
+      return r.deactivated ? { ok: true } : fail('release_failed', r.error);
     },
   };
 }

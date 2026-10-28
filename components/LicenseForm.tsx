@@ -53,7 +53,7 @@ export function LicenseForm() {
       }}
     >
       {state?.lastError && state.lastError !== 'offline' && (
-        <p className="error">Your key stopped working: {state.lastError}</p>
+        <p className="error">Your key stopped working. {state.lastError}</p>
       )}
       <label>
         License key

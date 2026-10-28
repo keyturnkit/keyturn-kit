@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { createLicenseManager, type StoredLicense } from '../lib/license/manager';
 import { lemonSqueezy } from '../lib/license/providers/lemonsqueezy';
+import { MESSAGES } from '../lib/license/errors';
 import { NetworkError, type LicenseProvider } from '../lib/license/types';
 
 const DAY = 86_400_000;
@@ -44,7 +45,7 @@ describe('lemonSqueezy provider', () => {
   it('rejects keys from another store without activating them', async () => {
     const f = jsonFetch(200, lsOk({ meta: { store_id: 99, product_id: 7 } }));
     const r = await lemonSqueezy({ storeId: 42, fetch: f }).activate('K-1', 'x');
-    expect(r).toEqual({ ok: false, error: 'This key belongs to a different store' });
+    expect(r).toMatchObject({ ok: false, error: MESSAGES.other_store });
     // Only the store check ran, so no activation slot was used on the other store's key.
     expect(f).toHaveBeenCalledOnce();
   });
@@ -60,10 +61,35 @@ describe('lemonSqueezy provider', () => {
     expect(r.ok).toBe(false);
   });
 
-  it('passes the API error through on 4xx', async () => {
+  it('maps the API error on 4xx to a friendly message and logs the original', async () => {
+    const debug = vi.spyOn(console, 'debug').mockImplementation(() => {});
     const f = jsonFetch(400, { activated: false, error: 'license_key not found.' });
     const r = await lemonSqueezy({ storeId: 42, fetch: f }).activate('nope', 'x');
-    expect(r).toEqual({ ok: false, error: 'license_key not found.' });
+    expect(r).toMatchObject({ ok: false, error: MESSAGES.not_found, reason: 'not_found' });
+    expect(debug.mock.calls.flat().join(' ')).toContain('license_key not found.');
+    debug.mockRestore();
+  });
+
+  const lsFail = async (error: string | null, extra: object = {}) => {
+    const debug = vi.spyOn(console, 'debug').mockImplementation(() => {});
+    const r = await lemonSqueezy({ storeId: 42, fetch: jsonFetch(400, { activated: false, valid: false, error, ...extra }) }).activate('K', 'x');
+    debug.mockRestore();
+    return r;
+  };
+
+  it('maps Lemon Squeezy failures: disabled, limit, expired, unknown text', async () => {
+    expect(await lsFail('This license key is disabled.')).toMatchObject({ error: MESSAGES.disabled });
+    expect(await lsFail('This license key has reached the activation limit.')).toMatchObject({ error: MESSAGES.limit });
+    expect(await lsFail('This license key has expired.')).toMatchObject({ error: MESSAGES.expired });
+    const odd = await lsFail('Something exploded in module X');
+    expect(odd).toMatchObject({ ok: false, error: MESSAGES.unknown });
+    expect((odd as { error: string }).error).not.toContain('exploded');
+    expect(await lsFail(null)).toMatchObject({ error: MESSAGES.unknown });
+  });
+
+  it('uses the friendly message when the other product is detected', async () => {
+    const r = await lemonSqueezy({ storeId: 42, productIds: [8], fetch: jsonFetch(200, lsOk()) }).activate('K-1', 'x');
+    expect(r).toMatchObject({ error: MESSAGES.other_product });
   });
 
   it('throws NetworkError on 5xx and fetch failures', async () => {
@@ -176,6 +202,13 @@ describe('license manager', () => {
     expect(await m.isPro()).toBe(true);
     advance(2 * DAY);
     expect(await m.isPro()).toBe(false);
+  });
+
+  it('turns a provider status that is not active into a plain message', async () => {
+    const disabled = setup({ activate: async () => ({ ok: true, license: { key: 'K', status: 'disabled', instanceId: 'i', expiresAt: null } }) });
+    expect(await disabled.m.activate('K', 'x')).toEqual({ ok: false, error: MESSAGES.disabled });
+    const expired = setup({ activate: async () => ({ ok: true, license: { key: 'K', status: 'expired', instanceId: 'i', expiresAt: null } }) });
+    expect(await expired.m.activate('K', 'x')).toEqual({ ok: false, error: MESSAGES.expired });
   });
 
   it('reports a friendly message when activation cannot reach the server', async () => {

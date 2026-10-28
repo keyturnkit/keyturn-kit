@@ -17,7 +17,7 @@ export interface LicenseInfo {
 
 export type ProviderResult =
   | { ok: true; license: LicenseInfo }
-  | { ok: false; error: string };
+  | { ok: false; error: string; reason?: import('./errors').FailReason };
 
 export interface LicenseProvider {
   readonly name: string;
