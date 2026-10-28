@@ -2,7 +2,7 @@
 
 Sell a Chrome extension with Lemon Squeezy license keys. No server, no secret key in the extension.
 
-Google wound down Chrome Web Store payments between 2020 and early 2021, so a paid extension has to sort out payment, license keys, offline use and refunds on its own. Lemon Squeezy takes the payment. This starter handles the license keys, offline use and disabled keys in about 400 lines of TypeScript.
+Google wound down Chrome Web Store payments between 2020 and early 2021, so a paid extension has to sort out payment, license keys, offline use and refunds on its own. Lemon Squeezy takes the payment. This starter handles the license keys, offline use and disabled keys in about 500 lines of TypeScript.
 
 Built on [WXT](https://wxt.dev), React and TypeScript, Manifest V3. Listed in the [WXT community resources](https://wxt.dev/guide/resources/community). Firefox builds come from WXT (`npm run zip:firefox`). That build passes Mozilla's `web-ext lint` with no errors (two warnings, both inside React DOM), but we haven't tried it by hand in Firefox yet.
 
@@ -77,7 +77,7 @@ A determined user can patch any client-side check. What this does stop is sharin
 The paid edition ($59, one-time) adds:
 
 - a free trial counted from install, and a daily number of free uses per feature
-- Polar, Dodo Payments, Gumroad and Payhip next to Lemon Squeezy, switched with one line
+- Polar, Dodo Payments, Gumroad and Payhip next to Lemon Squeezy, switched in `lib/config.ts`
 - AGENTS.md so Claude Code or Cursor adds paid features the right way
 
 [Get Pro, $59](https://buy.polar.sh/polar_cl_lbYlQnZT7FFPBcNrAdcwK1gqzx45xyNy3anEs3twjGy). Polar handles payment and tax; you get the source as a zip. It's also [on Gumroad](https://mamstudiohq.gumroad.com/l/hhecqu) if you'd rather pay there.
